@@ -31,11 +31,15 @@ def getNotes(previousConnection):
 #print notes from soup
 def printNotes(soup):
         moduleName = ' '
+        text_file = 'notes.txt'
+        f = open(text_file, 'w')
         for unite in soup.find_all(class_ = 'nomUnite'):
                 if moduleName != unite.find_previous('h3').get_text().strip():
                         moduleName = unite.find_previous('h3').get_text().strip()
                         print (moduleName)
+                        f.write(moduleName + '\n')
                 print ("\t", unite.get_text())
+                f.write('\t' + unite.get_text() + '\n')
                 notesList = [ ]
                 for note in unite.parent.find_all(class_ = 'noteTest'):
                         #print (note.get_text())
@@ -45,8 +49,12 @@ def printNotes(soup):
                         else:
                                 notesList.append(note.get_text())
                 print ("\t\tNotes :\t\t", notesList[:-3])
+                f.write('\t\tNotes : \t' + str(notesList[:-3]) + '\n')
                 print ("\t\tExamen :\t", notesList[-2:-1])
+                f.write('\t\tExamen : \t' + str(notesList[-2:-1]) + '\n')
                 print ("\t\tMoyenne :\t", notesList[-1:])
+                f.write('\t\tMoyenne : \t' + str(notesList[-1:]) + '\n')
+        f.close()
 
 #check login
 def login(username, password):
