@@ -1,5 +1,4 @@
 import string
-import sys
 import base64
 import random
 try:
@@ -25,6 +24,5 @@ def encrypting(data, key):
 
 def decrypting(data, key):
     """Returns a decrypted data(string) using key as decryption key"""
-    base_crypt = data.encode(encoding='UTF-8')
     bin_crypt = base64.b64decode(data)
     return decrypt(key, bin_crypt).decode(encoding='UTF-8')

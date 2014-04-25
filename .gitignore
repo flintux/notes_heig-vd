@@ -52,4 +52,8 @@ coverage.xml
 # Sphinx documentation
 docs/_build/
 
+#internal files of project
 heig-vd.config
+json.txt
+notes.txt
+heig-vd-notes.e4p
