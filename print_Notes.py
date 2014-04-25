@@ -3,6 +3,8 @@
 import sys
 import re
 import getpass
+import json
+
 try:
         import requests
 except ImportError:
@@ -30,6 +32,7 @@ def getNotes(previousConnection):
 
 #print notes from soup
 def printNotes(soup):
+        dictNotes = {}
         moduleName = ' '
         text_file = 'notes.txt'
         f = open(text_file, 'w')
@@ -38,7 +41,9 @@ def printNotes(soup):
                         moduleName = unite.find_previous('h3').get_text().strip()
                         print (moduleName)
                         f.write(moduleName + '\n')
+                        dictNotes[moduleName] = {}
                 print ("\t", unite.get_text())
+                dictNotes[moduleName][unite.get_text()] = []
                 f.write('\t' + unite.get_text() + '\n')
                 notesList = [ ]
                 for note in unite.parent.find_all(class_ = 'noteTest'):
@@ -50,11 +55,13 @@ def printNotes(soup):
                                 notesList.append(note.get_text())
                 print ("\t\tNotes :\t\t", notesList[:-3])
                 f.write('\t\tNotes : \t' + str(notesList[:-3]) + '\n')
+                dictNotes[moduleName][unite.get_text()] = notesList[:-3]
                 print ("\t\tExamen :\t", notesList[-2:-1])
                 f.write('\t\tExamen : \t' + str(notesList[-2:-1]) + '\n')
                 print ("\t\tMoyenne :\t", notesList[-1:])
                 f.write('\t\tMoyenne : \t' + str(notesList[-1:]) + '\n')
         f.close()
+        return dictNotes
 
 #check login
 def login(username, password):
@@ -72,20 +79,24 @@ def login(username, password):
 
 
 #MAIN starts here
+def main():
+        if len(sys.argv) == 3:
+                userName = sys.argv[1]
+                userPassword = sys.argv[2]
+        else:
+                userName = input("Username: ")
+                userPassword = getpass.getpass("Password: ")
 
-if len(sys.argv) == 3:
-        userName = sys.argv[1]
-        userPassword = sys.argv[2]
-else:
-        userName = input("Username: ")
-        userPassword = getpass.getpass("Password: ")
+        siteConnection = login(userName, userPassword)
 
-siteConnection = login(userName, userPassword)
+        if siteConnection != False:
+                print("Login OK")
+                notes = getNotes(siteConnection)
+                endresult = printNotes(notes)
+                with open('json.txt', 'w') as fichier:
+                        json.dump(endresult, fichier)                
+        else:
+                print ("Error during login")
 
-if siteConnection != False:
-        print("Login OK")
-        notes = getNotes(siteConnection)
-        printNotes(notes)
-else:
-        print ("Error during login")
-
+if __name__ == '__main__':
+        main()
