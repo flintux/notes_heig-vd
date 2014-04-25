@@ -85,6 +85,8 @@ def login(username, password):
 def check_auto():
     """checks available marks base on config"""
     config = read_config()
+    if not config:
+        sys.exit()
     siteConnection = login(config[c.FEE_USER],  config[c.FEE_PW])
     message = ''
     if siteConnection != False:

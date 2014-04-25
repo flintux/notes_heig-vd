@@ -52,6 +52,9 @@ coverage.xml
 # Sphinx documentation
 docs/_build/
 
+# Eric project files
+.eric5project/
+
 #internal files of project
 heig-vd.config
 json.txt

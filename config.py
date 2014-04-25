@@ -23,7 +23,7 @@ def read_config(config_file=c.CONFIG_FILE):
             key = config[c.CRYPT_KEY]
             if c.FEE_PW in config:
                 config[c.FEE_PW] = decrypting(config[c.FEE_PW], key)
-            if c.GMAIL_EMAIL in config:
+            if c.GMAIL_PW in config:
                 config[c.GMAIL_PW] = decrypting(config[c.GMAIL_PW], key)
         return config
     else:
@@ -50,13 +50,13 @@ def menu_config():
     config = {}
     config[c.FEE_USER] = input('Nom d\'utilisateur fee: ')
     config[c.FEE_PW] = getpass.getpass('Mot de passe fee: ')
-    mail_config = input('Voulez-vous configurer les emails gmail?')
+    mail_config = input('Voulez-vous configurer les emails gmail (O/N)? ')
     if mail_config.upper() == 'O' or mail_config.upper() == 'OUI':
         config[c.GMAIL_USE] = True
-        config[c.GMAIL_EMAIL] = input('Adresse email gmail:')
-        config[c.GMAIL_PW] = getpass.getpass('Mot de pass gmail')
+        config[c.GMAIL_EMAIL] = input('Adresse email gmail: ')
+        config[c.GMAIL_PW] = getpass.getpass('Mot de pass gmail: ')
     else:
         config[c.GMAIL_USE] = False
     save_config(config,  c.CONFIG_FILE)
-    print('Sauvegarde configuration effectuée')
+    print('Sauvegarde configuration effectuée.')
     return True
